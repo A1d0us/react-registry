@@ -1,8 +1,11 @@
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Root from "./pages/Root.tsx";
-import HomePage from "./pages/HomePage.tsx";
-import SearchPage from "./pages/SearchPage.tsx";
-import DetailsPage from "./pages/DetailsPage.tsx";
+import HomePage from "./pages/home/HomePage.tsx";
+import SearchPage from "./pages/search/SearchPage.tsx";
+import DetailsPage from "./pages/details/DetailsPage.tsx";
+import {searchLoader} from "./pages/search/searchLoader.ts";
+import {detailsLoader} from "./pages/details/detailsLoader.ts";
+import {homeLoader} from "./pages/home/homeLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -11,26 +14,18 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage/>
+        element: <HomePage/>,
+        loader: homeLoader
       },
       {
         path: '/search',
         element: <SearchPage/>,
-        loader: async ({request}) => {
-          const {searchParams} = new URL(request.url);
-          const term = searchParams.get('term');
-
-          if (!term) {
-            throw new Error('Search term must be provided');
-          }
-
-
-
-        },
+        loader: searchLoader
       },
       {
         path: '/packages/:name',
-        element: <DetailsPage/>
+        element: <DetailsPage/>,
+        loader: detailsLoader
       },
     ]
   }
